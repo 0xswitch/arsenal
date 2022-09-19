@@ -439,16 +439,22 @@ class Cheats:
 			cheat.printable_command = cheat.command.replace('\\\n', '')
 			self.cheatsheets[cheat.str_title + cheat.name] = cheat
 
-	def read_files(self, paths, file_formats, exclude_list):
+	def read_files(self, paths, file_formats, exclude_list, specified=None):
 		parsers = {
 			"md": self.parse_markdown,
 			"rst": self.parse_restructuredtext,
 			"yml": self.parse_yaml
 		}
-		paths = [paths] if isinstance(paths, str) else paths
-		for path in paths:
-			for file_format in file_formats:
-				for entry in Path(path).rglob('*.{0}'.format(file_format)):
-					if entry.name not in exclude_list and file_format in parsers.keys():
-						parsers[file_format](str(entry.absolute()))
+
+		if specified is not None:
+			ext = specified.split(".")[-1]
+			parsers[ext](specified)
+		else:
+			paths = [paths] if isinstance(paths, str) else paths
+			for path in paths:
+				for file_format in file_formats:
+					for entry in Path(path).rglob('*.{0}'.format(file_format)):
+						if entry.name not in exclude_list and file_format in parsers.keys():
+							parsers[file_format](str(entry.absolute()))
+	
 		return self.cheatsheets
