@@ -47,16 +47,15 @@ class App:
         group_out.add_argument('-e', '--exec', action='store_true', help='Execute cmd')
         group_out.add_argument('-t', '--tmux', action='store_true', help='Send command to tmux panel')
         group_out.add_argument('-c', '--check', action='store_true', help='Check the existing commands')
+        group_out.add_argument('-f', '--file', help='Use specific file')
         parser.add_argument('-V', '--version', action='version', version='%(prog)s (version {})'.format(__version__))
 
         return parser.parse_args()
 
     def run(self):
         args = self.get_args()
-
-        # load cheatsheets
-        cheatsheets = cheat.Cheats().read_files(config.CHEATS_PATHS, config.FORMATS,
-                                                config.EXCLUDE_LIST)
+        specified = args.file if args.file is not None else None
+        cheatsheets = cheat.Cheats().read_files(config.CHEATS_PATHS, config.FORMATS, config.EXCLUDE_LIST, specified=specified)
 
         if args.check:
             check.check(cheatsheets)
