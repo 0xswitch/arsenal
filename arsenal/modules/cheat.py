@@ -249,6 +249,13 @@ class Cheats:
 						self.new_cheat()
 						self.current_cheat.name = cmd["name"]
 						self.current_cheat.command = cmd["cmd"] if type(cmd["cmd"]) == str else cmd["cmd"][0]
+
+						try:
+							self.current_cheat.command.index("\n")
+							self.current_cheat.command = self.current_cheat.command.split("\n")[0]
+						except ValueError:
+							pass
+
 						if "description" in cmd.keys():
 							self.current_cheat.description = cmd["description"]
 

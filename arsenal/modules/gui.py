@@ -6,6 +6,7 @@ from curses import wrapper
 from os.path import commonprefix, exists, isdir
 from os import sep
 import glob
+import sys
 
 #  local
 from . import config
@@ -95,6 +96,8 @@ class CheatslistMenu:
         title = cheat.tags if cheat.tags != '' else cheat.str_title
 
         tags = cheat.get_tags()
+        print(cheat.str_title, cheat.name, file=open("/tmp/dbg", "w"))
+
 
         if selected:
             win.addstr(prompt, curses.color_pair(Gui.CURSOR_COLOR_SELECT))
@@ -125,6 +128,7 @@ class CheatslistMenu:
                        curses.color_pair(Gui.COL3_COLOR))
             # win.addstr("{:{}s}".format(Gui.draw_string(title, col0_size), col0_size),
             #            curses.color_pair(Gui.COL1_COLOR))
+
             win.addstr("\n")
 
 
